@@ -13,26 +13,26 @@ contract VCNFT is ERC721 {
 
 	using Strings for uint256;
 
-    struct Credential{
-        string  ClaimURI;
-        string  ClaimHash;
-        address Issuer;
-        uint256 IssuerTokenID;
-    }
+	struct Credential{
+		string  ClaimURI;
+		string  ClaimHash;
+		address Issuer;
+		uint256 IssuerTokenID;
+	}
     
-    mapping(uint256=>Credential) private _credentials;
+	mapping(uint256=>Credential) private _credentials;
 
-    function _isIssuer(address spender, uint256 tokenId) internal view virtual returns (bool) {
-        return
-            spender != address(0) && _credentials[tokenId].Issuer == spender ;
-    }
+	function _isIssuer(address spender, uint256 tokenId) internal view virtual returns (bool) {
+		return
+			spender != address(0) && _credentials[tokenId].Issuer == spender ;
+	}
 
 	function _transfer(address from, address to, uint256 tokenId) internal {
    		require(_isIssuer(msg.sender, tokenId), "VCNFT: caller is not issuer");
 		super._transfer(from, to, tokenId);
 	}
 
-    // =====================
+	// =====================
 
 	// Get claimURI
 	function claimURI(uint256 tokenId) public view virtual override returns (string memory) {
@@ -58,7 +58,7 @@ contract VCNFT is ERC721 {
 		return _credentials[_tokenId].IssuerTokenID ;
 	}
 
-    // =====================
+	// =====================
 
 	// certify --> mint
 	function certify(address _to, uint256 _tokenId, string _claimURI, string _claimHash, address _issuer, uint256 _issuerTokenID) public {
@@ -69,8 +69,7 @@ contract VCNFT is ERC721 {
 
 	// revoke --> burn
 	function revoke(uint256 tokenId) public virtual {
-        //solhint-disable-next-line max-line-length
-   		require(_isIssuer(msg.sender, tokenId), "VCNFT: caller is not issuer");
+		require(_isIssuer(msg.sender, tokenId), "VCNFT: caller is not issuer");
 		_burn(tokenId);
 		_supply.decrement();
 	}
