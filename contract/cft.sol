@@ -64,13 +64,11 @@ contract VCNFT is ERC721 {
 	function certify(address _to, uint256 _tokenId, string _claimURI, string _claimHash, address _issuer, uint256 _issuerTokenID) public {
 		_safeMint(_to, _tokenId);
 		_credentials[_tokenId] = Credential(_claimURI,_claimHash,_issuer,_issuerTokenID);
-		_supply.increment();
 	}
 
 	// revoke --> burn
 	function revoke(uint256 tokenId) public virtual {
 		require(_isIssuer(msg.sender, tokenId), "VCNFT: caller is not issuer");
 		_burn(tokenId);
-		_supply.decrement();
 	}
 }
