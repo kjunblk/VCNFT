@@ -61,9 +61,9 @@ contract VCNFT is ERC721 {
 	// =====================
 
 	// certify --> mint
-	function certify(address _to, uint256 _tokenId, string _claimURI, string _claimHash, address _issuer, uint256 _issuerTokenID) public {
+	function certify(address _to, uint256 _tokenId, string _claimURI, string _claimHash, uint256 _issuerTokenID) public {
 		_safeMint(_to, _tokenId);
-		_credentials[_tokenId] = Credential(_claimURI,_claimHash,_issuer,_issuerTokenID);
+		_credentials[_tokenId] = Credential(_claimURI, _claimHash, msg.sender, _issuerTokenID);
 	}
 
 	// revoke --> burn
