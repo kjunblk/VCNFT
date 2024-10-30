@@ -7,12 +7,10 @@
 
 pragma solidity ^0.8.20 ;
 
-//import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
+import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 
-//contract VCNFT is ERC721 {
-contract VCNFT {
+contract VCNFT is ERC721 {
 
-/*
 	using Strings for uint256;
 
 	struct Credential{
@@ -23,13 +21,10 @@ contract VCNFT {
 	}
     
 	mapping(uint256=>Credential) private _credentials;
-*/
 
-//	constructor(string memory _name, string memory _symbol) ERC721(_name, _symbol) {
-	constructor(string memory _name, string memory _symbol) {
+	constructor(string memory _name, string memory _symbol) ERC721(_name, _symbol) {
 	}
 
-/*
 	function _isIssuer(address spender, uint256 tokenId) internal view virtual returns (bool) {
 		return spender != address(0) && _credentials[tokenId].Issuer == spender ;
 	}
@@ -82,6 +77,5 @@ contract VCNFT {
    		require(_isIssuer(msg.sender, tokenId), "VCNFT: caller is not issuer");
 		super.transferFrom(from, to, tokenId) ;
 	}
-*/
 }
 
