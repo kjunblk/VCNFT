@@ -59,6 +59,12 @@ contract VCNFT is ERC721 {
 		return _credentials[_tokenId].IssuerTokenID ;
 	}
 
+	// Get credential
+	function credential(uint256 _tokenId) public view returns (Credential memory) {
+		require(_exists(_tokenId), "VCNFT: URI query for nonexistent token.");
+		return _credentials[_tokenId] ;
+	}
+
 	// =====================
 
 	// certify --> mint
