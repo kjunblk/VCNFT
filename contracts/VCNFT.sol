@@ -75,10 +75,14 @@ contract VCNFT is ERC721 {
 
 	function transferFrom(address from, address to, uint256 tokenId) public virtual override {
    		require(_isIssuer(msg.sender, tokenId), "VCNFT: caller is not issuer");
-   		require(from != address(0), "VCNFT: from address is invlalid"); 
-   		require(to != address(0), "VCNFT: to addressis invlalid"); 
 
-        _update(to, tokenId, msg.sender);
+		if (to == address(0)) {
+            revert ERC721InvalidReceiver(address(0));
+        }
+
+		address previousOwner = _update(to, tokenId, address(0));
+        if (previousOwner != from) {
+            revert ERC721IncorrectOwner(from, tokenId, previousOwner);
+        }
     }
 }
-
