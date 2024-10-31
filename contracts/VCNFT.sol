@@ -62,7 +62,7 @@ contract VCNFT is ERC721 {
 	// =====================
 
 	// certify --> mint
-	function certify(address _to, uint256 _tokenId, string calldata _claimURI, string calldata _claimHash, uint256 _issuerTokenID) public {
+	function certify(address _to, uint256 _tokenId, string calldata _claimURI, string calldata _claimHash, uint256 _issuerTokenID) public virtual {
 		_safeMint(_to, _tokenId);
 		_credentials[_tokenId] = Credential(_claimURI, _claimHash, msg.sender, _issuerTokenID);
 	}
@@ -75,7 +75,10 @@ contract VCNFT is ERC721 {
 
 	function transferFrom(address from, address to, uint256 tokenId) public virtual override {
    		require(_isIssuer(msg.sender, tokenId), "VCNFT: caller is not issuer");
-		super.transferFrom(from, to, tokenId) ;
-	}
+   		require(from != address(0), "VCNFT: from address is invlalid"); 
+   		require(to != address(0), "VCNFT: to addressis invlalid"); 
+
+        _update(to, tokenId, msg.sender);
+    }
 }
 
