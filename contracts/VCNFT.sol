@@ -16,11 +16,15 @@ contract VCNFT is ERC721 {
 	struct Credential{
 		string  ClaimURI;
 		string  ClaimHash;
+
 		address Issuer;
-		uint256 IssuerTokenID;
-		uint256 issuanceTime;    // 발급 시각 (밀리초 단위)
-		uint256 expirationTime;  // 만료 시각 (밀리초 단위)
-		string  optionalData;    // 기타 데이터 (옵션)
+		uint256 IssuerTokenID;   // Issuer 신원검증용 Token ID, chain ID등 부가 정보가 필요할 수 있음 
+
+		uint256 IssueDate;       // 발급 시각 (Unix Time)
+		uint256 ExpirationDate;  // 만료 시각 (Unix Time), 0값은 무한으로 사용 권장
+
+		string  OptionalData;    // 기타 데이터, 문자열로 저장, 응용에서 자유롭게 사용
+
 	}
     
 	mapping(uint256=>Credential) private _credentials;
@@ -56,10 +60,28 @@ contract VCNFT is ERC721 {
 		return _credentials[_tokenId].Issuer ;
 	}
 
-	// Get issuerTokenID
+	// Get issuer TokenID
 	function issuerTokenID(uint256 _tokenId) public view returns (uint256) {
 		require(_exists(_tokenId), "VCNFT: URI query for nonexistent token.");
 		return _credentials[_tokenId].IssuerTokenID ;
+	}
+
+	// Get issue date
+	function issueDate(uint256 _tokenId) public view returns (uint256) {
+		require(_exists(_tokenId), "VCNFT: URI query for nonexistent token.");
+		return _credentials[_tokenId].IssueDate ;
+	}
+
+	// Get expiration date
+	function expirationDate(uint256 _tokenId) public view returns (uint256) {
+		require(_exists(_tokenId), "VCNFT: URI query for nonexistent token.");
+		return _credentials[_tokenId].ExpirationDate ;
+	}
+
+	// Get optional data
+	function optionalData(uint256 _tokenId) public view returns (string memory) {
+		require(_exists(_tokenId), "VCNFT: URI query for nonexistent token.");
+		return _credentials[_tokenId].OptionalData ;
 	}
 
 	// Get credential
@@ -77,8 +99,8 @@ contract VCNFT is ERC721 {
 		string calldata _claimURI,
 		string calldata _claimHash,
 		uint256 _issuerTokenID,
-		uint256 _issuanceTime,
-		uint256 _expirationTime,
+		uint256 _issueDate,
+		uint256 _expirationDate,
 		string calldata _optionalData
 	) public virtual {
 		_safeMint(_to, _tokenId);
@@ -87,8 +109,8 @@ contract VCNFT is ERC721 {
 			_claimHash,
 			msg.sender,
 			_issuerTokenID,
-			_issuanceTime,
-			_expirationTime,
+			_issueDate,
+			_expirationDate,
 			_optionalData
 		);
 	}
