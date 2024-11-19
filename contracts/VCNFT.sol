@@ -18,6 +18,9 @@ contract VCNFT is ERC721 {
 		string  ClaimHash;
 		address Issuer;
 		uint256 IssuerTokenID;
+		uint256 issuanceTime;    // 발급 시각 (밀리초 단위)
+		uint256 expirationTime;  // 만료 시각 (밀리초 단위)
+		string  optionalData;    // 기타 데이터 (옵션)
 	}
     
 	mapping(uint256=>Credential) private _credentials;
@@ -68,9 +71,26 @@ contract VCNFT is ERC721 {
 	// =====================
 
 	// certify --> mint
-	function certify(address _to, uint256 _tokenId, string calldata _claimURI, string calldata _claimHash, uint256 _issuerTokenID) public virtual {
+	function certify(
+		address _to,
+		uint256 _tokenId,
+		string calldata _claimURI,
+		string calldata _claimHash,
+		uint256 _issuerTokenID,
+		uint256 _issuanceTime,
+		uint256 _expirationTime,
+		string calldata _optionalData
+	) public virtual {
 		_safeMint(_to, _tokenId);
-		_credentials[_tokenId] = Credential(_claimURI, _claimHash, msg.sender, _issuerTokenID);
+		_credentials[_tokenId] = Credential(
+			_claimURI,
+			_claimHash,
+			msg.sender,
+			_issuerTokenID,
+			_issuanceTime,
+			_expirationTime,
+			_optionalData
+		);
 	}
 
 	// revoke --> burn
@@ -80,15 +100,15 @@ contract VCNFT is ERC721 {
 	}
 
 	function transferFrom(address from, address to, uint256 tokenId) public virtual override {
-   		require(_isIssuer(msg.sender, tokenId), "VCNFT: caller is not issuer");
+		require(_isIssuer(msg.sender, tokenId), "VCNFT: caller is not issuer");
 
 		if (to == address(0)) {
-            revert ERC721InvalidReceiver(address(0));
-        }
+			revert ERC721InvalidReceiver(address(0));
+		}
 
 		address previousOwner = _update(to, tokenId, address(0));
-        if (previousOwner != from) {
-            revert ERC721IncorrectOwner(from, tokenId, previousOwner);
-        }
-    }
+		if (previousOwner != from) {
+			revert ERC721IncorrectOwner(from, tokenId, previousOwner);
+		}
+	}
 }
