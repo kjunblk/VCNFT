@@ -1,18 +1,6 @@
 # Verifiable Credential NFT 
 ## Abstract
-
 ## Contracts 
-
-### Simple Summary
-### Definitions
-
-* Identifier: a piece of data that uniquely identifies the identity, an ethereum address
-* delegate: an address that is delegated for a specific time to perform some sort of function on behalf of an identity
-* delegateType: the type of a delegate, is a section name with verification relationships (https://www.w3.org/TR/did-core/#verification-relationships) in a DID document for examples:
-    * authentication
-    * assertionMethod
-* attribute: a piece of data associated with the identity
-
 ### Read credential data for a NFT 
 #### claimURI
 Returns a URI pointing to a resource with the claims of the given credential NFT.
@@ -29,23 +17,23 @@ Returns the issuer's address (minter) for the given credential NFT.
 ```
 function issuer(uint256 _tokenId) public view returns (address) 
 ```
-#### issuer TokenID
+#### issuerTokenID
 Returns the identifier for a token stores the issuer's trusted certificate. 
 ```
 function issuerTokenID(uint256 _tokenId) public view returns (uint256) 
 ```
-#### issue date
+#### issueDate
 Returns the issuance date for the given credential NFT.
 ```
 function issueDate(uint256 _tokenId) public view returns (uint256) 
 ```
-#### optional data
+#### optionalData
 Returns the optional data (string) for the given credential NFT.
 ```
 function optionalData(uint256 _tokenId) public view returns (string memory) 
 ```
 
-#### credential data
+#### credential
 Returns all credential data with the following structure for the given credential NFT.
 ```
         struct Credential{
@@ -86,4 +74,3 @@ Transfers a specific NFT (tokenId) from one account (from) to another (to). Only
 ``` 
 function transferFrom(address from, address to, uint256 tokenId) 
 ``` 
-
