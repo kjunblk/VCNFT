@@ -3,12 +3,12 @@
 ## Contracts 
 ### Read credential data for a NFT 
 #### claimURI
-Returns a URI pointing to a resource with the claims of the given credential NFT.
+Returns a URI pointing to a resource with the claims for the given credential NFT.
 ```
 function claimURI(uint256 _tokenId) public view returns (string memory) 
 ```
 #### claimHash
-Returns the hash value for the claims of the given credential NFT.
+Returns the hash value for the claims for the given credential NFT.
 ```
 function claimHash(uint256 _tokenId) public view returns (string memory) 
 ```
@@ -23,7 +23,7 @@ Returns the identifier for a token stores the issuer's trusted certificate.
 function issuerTokenID(uint256 _tokenId) public view returns (uint256) 
 ```
 #### issueDate
-Returns the issuance date for the given credential NFT.
+Returns the issuance date (Unix Time) for the given credential NFT.
 ```
 function issueDate(uint256 _tokenId) public view returns (uint256) 
 ```
@@ -36,15 +36,15 @@ function optionalData(uint256 _tokenId) public view returns (string memory)
 #### credential
 Returns all credential data with the following structure for the given credential NFT.
 ```
-        struct Credential{
-                string  ClaimURI;
-                string  ClaimHash;
-                address Issuer;
-                uint256 IssuerTokenID;   // Issuer 신원검증용 Token ID, chain ID등 부가 정보가 필요할 수 있음
-                uint256 IssueDate;       // 발급 시각 (Unix Time)
-                uint256 ExpirationDate;  // 만료 시각 (Unix Time), 0값은 무한으로 사용 권장
-                string  OptionalData;    // 기타 데이터, 문자열로 저장, 응용에서 자유롭게 사용
-        }
+struct Credential{
+	string  ClaimURI;	// A URI pointing to a resource with the claims
+	string  ClaimHash;	// A hash value for the claims
+	address Issuer;		// Issuer's address (minter)
+	uint256 IssuerTokenID;	// The identifier for a token stores the issuer's trusted certificate
+	uint256 IssueDate;	// The issuance date (Unix Time)
+	uint256 ExpirationDate;	// The expiration time (Unix Time). A value of 0 is infinite
+	string  OptionalData;	// the optional data (string type)
+}
 ```
 ```
 function credential(uint256 _tokenId) public view returns (Credential memory) 
@@ -72,5 +72,5 @@ function revoke(uint256 tokenId)
 Transfers a specific NFT (tokenId) from one account (from) to another (to). Only the issuer of the NFT can execute it.
 
 ``` 
-function transferFrom(address from, address to, uint256 tokenId) 
+function transferFrom(address _from, address _to, uint256 _tokenId) 
 ``` 
